@@ -1,0 +1,9 @@
+{{ extend 'layout.html' }}
+
+{{from gluon.contrib.markdown import WIKI}}
+
+<div style="background-color: black; color: white;">
+ {{=XML(WIKI(v.t)) or 'None'}}
+</div>
+
+{{=form}}

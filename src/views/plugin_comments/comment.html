@@ -1,0 +1,125 @@
+<div class="plugin_comments">
+
+    {{cnt = len(rows)
+    alt = False
+    }}
+    <h3 id="comments">{{=cnt}} Responses
+    <span style="font-size: .5em;"><a href="{{=settings.rss % settings.rss_link_dict}}">Comment RSS Feed</a></span>
+    </h3> 
+    
+    <ol class="commentlist">
+        {{for row in rows:
+            alt = not alt
+            name = row.comment.r_name
+            site = row.comment.r_site
+            body = row.comment.content
+            date = row.comment.posted_on
+        }}
+            <li {{if alt: }}class="alt"{{pass}} id="comment-{{=row.comment.id}}">
+                <cite>
+			        <span class="authorinfo">
+			            {{=A(name, _href=site, _rel="external nofollow") if name else 'Anonymous'}} <br />
+                        <img alt="" src="{{=plugin_comments_gravatar_url(row.comment.r_email)}}" class="avatar" height="40" width="40" />	
+                    </span>
+                </cite>
+
+                    <span class="datetime">
+                        <p class="month">{{=date.strftime("%b")}}</p>
+                        <p class="day">{{=date.strftime("%d")}}</p>
+                        <p class="year">{{=date.strftime("%Y")}}</p>
+                        <p class="time">{{=date.strftime("%I:%M %p")}}</p>
+                    </span>
+                <blockquote class="comment-text">
+<p>
+{{if plugin_comments.settings.markdown == 'wiki':}}
+    {{try:}}
+        {{=WIKI(body)}}
+    {{except:}}
+        {{=body}}
+    {{pass}}
+{{elif plugin_comments.settings.markdown == 'xml':}}
+    {{=XML(body, permitted_tags=plugin_comments.settings.markdown_permitted_tags)}}
+{{else:}}
+    {{=body}}
+{{pass}}
+</p>
+                    <p class="datetime-blockquote">
+                        <span class="month">{{=date.strftime("%b")}}</span>
+                        <span class="day">{{=date.strftime("%d")}}</span>
+                        <span class="year">{{=date.strftime("%Y")}}</span>
+                        <span class="time">{{=date.strftime("%I:%M %p")}}</span>
+                    </p>
+
+                <span class="arrow">&nbsp;</span>
+			    </blockquote>	
+			    
+            </li>
+        {{pass}}
+    </ol>
+    
+    <div id="response">
+    <h3 id="respond"><a name="respond">Leave a Reply</a></h3>
+	
+    
+    {{=form.custom.begin}}
+    {{def item(item, require=False):}}
+        <div class="form_item">
+            <div class="labels {{if require:}}required{{pass}}">
+                <label for="{{=item}}">{{=form.custom.label[item]}}</label>
+                {{if form.custom.comment[item]:}}
+                    <label for"{{=item}}" class="comment">
+                    {{=form.custom.comment[item]}}<span class='br'></span>
+                    </label>
+                {{pass}}
+                <span class='br'></span>
+            </div>
+            <div class="widget">
+            {{=form.custom.widget[item]}}
+            </div>
+        </div>
+    {{pass}}
+    {{item('r_name')}}
+    {{item('r_email', True)}}
+    {{item('r_site')}}
+    <div id="edit_preview" class="editpreview" onclick="hidePreview(this);"></div>
+    {{item('content', True)}}
+    {{if plugin_comments.settings.markdown_wmd_prv:}}
+        {{=INPUT(_type='button', _value='Preview', _onclick='showPreview(this);')}}
+    {{pass}}
+    {{if 'anti_spam' in form.fields:}}
+        {{item('anti_spam', True)}}
+    {{pass}}
+    <div class="form_item">
+    <p class="no-border">
+        <input class="button" type="submit" value="Submit">
+    </p>
+    </div>
+    
+    {{=form.custom.end}}
+    
+    {{if plugin_comments.settings.markdown_wmd_loc:}}
+        <script>
+        var wmd_options = {
+            buttons: "{{=plugin_comments.settings.markdown_wmd_btn}}",
+        };
+        {{if plugin_comments.settings.markdown_wmd_prv:}}
+            function hidePreview(e){
+                jQuery("#edit_preview").slideUp();
+            };
+            function showPreview(e){
+                {{prv = plugin_comments.settings.markdown_wmd_prv}}
+                {{if 'anti_spam' in form.fields:}}
+                    ajax('{{=prv}}', ['no_table_content'], 'edit_preview');
+                {{else:}}
+                    ajax('{{=prv}}', ['plugin_comments_comment_content'], 'edit_preview');
+                {{pass}}
+                jQuery("#edit_preview").slideDown();
+            };
+        {{pass}}
+        </script>
+        <script src="{{=plugin_comments.settings.markdown_wmd_loc}}"></script>
+    {{pass}}
+    </div>
+</div>
+
+

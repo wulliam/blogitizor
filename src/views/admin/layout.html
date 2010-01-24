@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+	{{def paginate():}}
+    {{if response.paginate_links:}}
+            <div class="pagination">
+                <div class="paginate_back">
+                    {{=response.paginate_links[0]}}
+                </div>
+                <div class="paginate_forw">
+                    {{=response.paginate_links[1]}}
+                </div>
+                <div class="paginate_loc">
+                    {{=response.paginate_links[2]}}
+                </div>
+            </div>
+    {{pass}}
+    {{pass}}
+		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+		
+		<title>{{=response.title or response.action.capitalize()}} > {{=request.controller.capitalize()}} > Blogitizor</title>
+		
+		<meta name="author" content="Thadeus Burgess <thadeusb@thadeusb.com>" />
+		<meta name="description" content="{{=response.meta.description}}" />
+		<meta name="keywords" content="{{=response.meta.keywords}}" />
+		
+		<meta name="robots" content="index, follow, noarchive" />
+		<meta name="googlebot" content="noarchive" />
+		
+		
+		<link rel="icon" href="favicon.ico" type="image/x-icon" />
+		
+		 {{	  
+			manager.require_cdn("jquery")
+			manager.require_cdn("jquery.ui")
+			manager.include(URL(r=request, c='static', f='css/admin/jquery-ui-1.7.2.custom-min.css'))    
+			manager.include(URL(r=request, c='static', f='css/admin/admin-min.css'))
+			}}
+			    
+		    {{=manager.xml(False)}}
+			
+		<script>
+		$(document).ready(function() {
+			if(jQuery('.flash').html()!=''){
+				jQuery('.flash, #flash').slideDown('slow');
+				}
+			jQuery('.flash, #flash').click(function() { 
+				jQuery(this).fadeOut('slow'); 
+				return false; });
+			setTimeout(
+				function(){
+				jQuery('.flash, #flash').fadeOut('slow');
+				}, 6000);
+	          
+		});
+		</script>
+		
+		{{include 'web2py_ajax.html'}}
+	</head>
+																
+	<body><div id="flash">
+			<div class="flash">{{=response.flash}}</div>
+		</div>
+{{if auth.is_logged_in():}}
+		<div id="header">
+		
+				<h1><a href="{{=URL(r=request, c='admin', f='index')}}">Blogitizor Admin</a></h1>
+				<ul class="nav ui-helper-clearfix">
+						{{for item in response.menu:}}
+								{{
+								title = item[0]
+								active = item[1]
+								url = item[2]
+								name = item[3]
+								float = item[4]
+								}}
+								<li class="{{if active:}}active{{pass}}" {{if float:}}style="float: right;"{{pass}}>
+										{{=A(title, _href=url)}}
+								</li>
+						{{pass}}
+				</ul>
+		</div>
+{{pass}}
+
+<div id="main">
+  	  <div id="content">
+	  {{include}}
+	  </div>
+	  <div id="sidebar">
+		<!-- sidebar -->&nbsp;<!-- end sidebar -->
+	  </div>
+    </div>
+		
+{{if auth.is_logged_in():}}
+<div id="footer">
+      <p><a href="#">{{=__site_name__}}</a> {{=__version__}}</p>
+      <p id="user">
+        You are currently logged in as <a href="{{=URL(r=request, c='admin', f='user/profile')}}"><em>{{=auth.user.first_name}} {{=auth.user.last_name}}</em></a>
+        <span class="separator"> | </span>
+        <a href="{{=URL(r=request, c='admin', f='user', args='logout')}}">Log Out</a>
+        <span class="separator"> | </span>
+        {{=A("View Site", _href=URL(r=request, c='default', f='index'))}}
+      </p>
+    </div>
+{{pass}}
+{{=manager.xml()}}
+	</body>
+</html>

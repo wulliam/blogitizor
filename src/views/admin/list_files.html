@@ -1,0 +1,39 @@
+{{ extend 'admin/layout.html' }}
+
+<h2>Files Listing</h2>
+
+<div class="list">
+<p>
+Upload a new {{=A("File", _href=URL(r=request, c='admin', f='edit_file'))}}
+</p>   
+{{paginate()}}
+        <div class="list-header">
+            <div class="head title">Title</div>
+            <div class="head">Type</div>
+            <div class="head">Created On</div>
+            <div class="head">Download</div>
+            <div class="head">Delete</div>
+            <div class="clear"></div>
+        </div>
+    {{for file in files:}}
+        <ul>
+            <li>
+                
+                <small style="float: right;">
+{{=A("(delete)", _href=URL(r=request, f='delete_file', 
+                args=file.id, 
+            ))}}</small>
+                <div class="item title">{{=A(file.title, _href=URL(r=request, f='edit_file', args=file.id))}}</div>
+                <div class="item">{{=file.type}}</div>
+                <div class="item">{{=file.created_on.strftime("%Y-%m-%d %I:%M %p")}}</div>
+                {{if file.type == "image":}}
+                    <div class="item">{{=A(IMG(_width="150px", _src=file_download_url(file)), _href=file_download_url(file))}}</div>
+                {{else:}}
+                    <div class="item">{{=A("(download)", _href=file_download_url(file))}}</div>
+                {{pass}}
+                <div class="clear"></div>
+            </li>
+        </ul>
+    {{pass}}
+{{paginate()}}
+</div>

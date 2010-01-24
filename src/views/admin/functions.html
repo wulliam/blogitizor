@@ -1,0 +1,43 @@
+{{def information_list(intro, data):}}
+<div id="list">
+    <p class="intro">{{=intro}}</p>
+    
+    {{for item in data['items']:}}
+        {{
+        small_name = item['small_name']
+        name = item['name']
+        name_extra = item['name_extra']
+        content = item['content']
+        }}
+        <div id="list-header">
+            <small style="float:right">{{=small_name}}</small>
+            {{=name}}
+            <em class="version">{{=name_extra}}</em>
+            
+        </div>
+        <div class="nut-doc">
+            <p>{{=content}}</p>
+        </div>
+    {{pass}}
+</div>
+{{pass}}
+
+{{def table_list(intro, data):}}
+<div id="list">
+    <p class="intro">{{=intro}}</p>
+    <div id="list-header">
+        {{for head in data['header']:}}
+            <div>{{=head}}</div>
+        {{pass}}
+    </div>
+    {{for item in data['items']:}}
+        <ul id="{{item['id']}}">
+            <li {{if item.has_key('children'):}}class="has-children"{{pass}}>
+                {{for col in item['cols']:}}
+                    <div>{{=col}}</div>
+                {{pass}}
+            </li>
+        </ul>
+    {{pass}}
+</div>
+{{pass}}

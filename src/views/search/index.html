@@ -1,0 +1,84 @@
+{{extend 'layout.html'}}
+
+<div id="search">
+
+    <h2>def search():</h2>
+    
+    {{if request.vars.error:}}
+    <div style="text-align: center">
+        <h3 style="font-size: 2.2em;">OOPS</h3>
+        <p>
+        You triggered <strong style="font-size: 3em;"><em>404</em></strong> exception. 
+        </p>
+        <p>
+        Also known as <strong><em>0b110010100</em></strong> or
+        <strong><em>0x194</em></strong> or
+        <strong><em>0o624</em></strong>
+        </p>
+        <p>
+        Below are some suggested entries to help you find what you were looking for.</p>
+    </div>
+    {{pass}}
+
+    <form method="get" action="{{=URL(r=request, c="search", f="index")}}">
+        <p>
+            <input type="text" name="q" id="id_q" value="{{=query}}" />
+            <br /><small>Common words are filtered out</small>
+        </p>
+        <p class="buttons">
+            <input type="submit" value="Search" />
+        </p>
+    </form>
+    </p>
+    
+    {{if results:}}
+    {{if response.paginate_links:}}
+        <div class="pagination">
+            <div class="paginate_back">
+                {{=response.paginate_links[0]}}
+            </div>
+            <div class="paginate_forw">
+                {{=response.paginate_links[1]}}
+            </div>
+            <div class="paginate_loc">
+                {{=response.paginate_links[2]}}
+            </div>
+        </div>
+    {{pass}}    
+    
+    <table id="results">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date of Publication</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{for page in results['pages']:}}
+                <tr>
+                    <td class='title'>
+                        {{=A(page.title, _href=URL(r=request, c=WEBLOG, f='view', args=page.slug))}}
+                    </td>
+                    <td class='pub_date'>
+                        {{=page.posted_on}}
+                    </td>
+                </tr>
+            {{pass}}
+        </tbody>
+    </table>
+    
+    {{if response.paginate_links:}}
+        <div class="pagination">
+            <div class="paginate_back">
+                {{=response.paginate_links[0]}}
+            </div>
+            <div class="paginate_forw">
+                {{=response.paginate_links[1]}}
+            </div>
+            <div class="paginate_loc">
+                {{=response.paginate_links[2]}}
+            </div>
+        </div>
+    {{pass}}
+    {{pass}}
+</div>

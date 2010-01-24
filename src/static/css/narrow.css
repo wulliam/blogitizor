@@ -1,0 +1,53 @@
+
+body.narrow #root {
+  margin: auto;
+  width: 95%;
+}
+
+body.narrow #header {
+  text-align: center;
+}
+
+body.narrow #logo {
+  float: none;
+}
+
+body.narrow #nav {
+  float: none;
+}
+
+body.narrow #main {
+  clear: both;
+  width: 95%;
+}
+
+body.narrow #main #accessories {
+  width: 100%;
+  margin: auto;
+}
+
+body.narrow #main #accessories form#quick-search {
+  width: 100%;
+}
+
+body.narrow #main #accessories form#quick-search .tbox {
+  width: 90%;
+}
+
+body.narrow #content {
+  float: none;
+  width: 100%;
+}
+
+body.narrow #sidebar {
+  float: none;
+  width: 100%;
+  margin-top: 15px;
+  margin-left: 0;
+}
+
+body.narrow #sidebar .block {
+  width: 100%;
+  padding: 20px;
+  margin-right: none;
+}

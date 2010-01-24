@@ -1,0 +1,159 @@
+
+.plugin_comments form label {
+  float: left;
+  clear: left;
+}
+
+.plugin_comments form .form_item {
+  clear: both;
+  padding: 5px;
+  margin: 5px;
+}
+
+.plugin_comments form .labels {
+  clear: both;
+  float: left;
+  width: 25%;
+  margin-right: 15px;
+}
+
+.plugin_comments form .widget {
+  width: 75%;
+  margin-left: 25%;
+}
+
+.plugin_comments form .comment {
+  font-size: .8em;
+}
+
+.plugin_comments form .required label {
+  color: #ff5c8d;
+}
+
+.plugin_comments form .br {
+  display: block;
+}
+
+.plugin_comments ol {
+  margin-left: 1%;
+  padding-left: 1%;
+}
+
+.plugin_comments ol li {
+  list-style-type: none;
+  clear: both;
+}
+
+.plugin_comments ol li cite {
+  float: left;
+  width: 10%;
+  font-size: .9em;
+  text-align: center;
+}
+
+.plugin_comments ol li cite img {
+  max-width: 100%;
+}
+
+.plugin_comments ol li cite a {
+  text-decoration: none;
+}
+
+.plugin_comments ol li cite .authorinfo {
+  display: block;
+  width: 100%;
+}
+
+.plugin_comments ol li blockquote {
+  background-color: #c3e8ff;
+  margin-left: 15%;
+  margin-right: 0;
+  padding: 10px;
+  position: relative;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+}
+
+.plugin_comments ol li blockquote .arrow {
+  width: 0;
+  height: 0;
+  line-height: 0;
+  border-top: 25px solid #c3e8ff;
+  border-left: 25px solid white;
+  position: absolute;
+  top: 20px;
+  left: -25px;
+  -webkit-border-top-left-radius: 55px;
+  -moz-border-radius-topleft: 55px;
+}
+
+.plugin_comments ol li .datetime {
+  border: 1px solid #999999;
+  display: none;
+  font-family: Georgia, 'New Centry Schoolbook', 'Book Antiqua', 'Times New Roman', serif;
+  width: 3.5em;
+  float: right;
+}
+
+.plugin_comments ol li .datetime p {
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  font-size: x-small;
+}
+
+.plugin_comments ol li .datetime p.day {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.plugin_comments ol li .datetime p.month {
+  font: 95% Georgia, 'New Centry Schoolbook', 'Book Antiqua', 'Times New Roman', serif;
+  padding-top: 0.3em;
+  text-transform: uppercase;
+}
+
+.plugin_comments ol li .datetime p.year {
+  font: 115% Georgia, 'New Centry Schoolbook', 'Book Antiqua', 'Times New Roman', serif;
+  background-color: #2f4765;
+  color: #fefefe;
+}
+
+.plugin_comments ol li .datetime-blockquote {
+  font-family: Georgia, 'New Centry Schoolbook', 'Book Antiqua', 'Times New Roman', serif;
+  color: #333333;
+  font-style: italic;
+  font-size: .9em;
+  text-align: right;
+  width: 100%;
+}
+
+.plugin_comments ol li .datetime-blockquote p.month {
+  text-transform: uppercase;
+}
+
+.plugin_comments #respond,
+.plugin_comments #comments {
+  font-size: 2em;
+}
+
+.plugin_comments #respond,
+.plugin_comments #response {
+  clear: both;
+}
+
+.plugin_comments #response #edit_preview {
+  display: none;
+}
+
+.plugin_comments #response .editpreview {
+  background-color: white;
+  width: 50%;
+  height: 400px;
+  border: 1px solid;
+  text-align: left;
+  position: absolute;
+  overflow: scroll;
+  z-index: 10000;
+  padding: 10px;
+}

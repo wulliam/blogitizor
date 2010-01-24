@@ -1,0 +1,72 @@
+{{ extend 'admin/layout.html' }}
+{{ include 'admin/functions.html' }}
+<div class="wrapper">
+<div class="left-side">
+<h2>Main Control Interface</h2>
+
+<div class="list">
+    <p class="intro">
+    Welcome to your new adminstration interface. Below are the options you can perform.
+    </p>
+    
+    <div class="list-header">
+        <small>weblog.pages</small> 
+        Pages 
+        <em class="em"> ver. 1.23</em>
+    </div>
+    <div class="content">
+        <p>
+            This module will allow you to create and edit blog posts
+            This is a very simple module of course.
+        </p>
+        <p>
+            But we like it nonetheless
+        </p>
+        <div>
+            <p>
+            {{=A("List Pages", _href=URL(r=request, f='list_pages'))}}
+            </p>
+            <p>
+            {{=A("Post a new Page", _href=URL(r=request, c='admin', f='create', args='page'))}}
+            </p>
+            <p>
+            {{=A("Post a new Post", _href=URL(r=request, c='admin', f='create', args='post'))}}
+            </p>  
+        </div>
+        
+    </div>
+</div>
+
+</div>
+<div class="">
+    <h2>Latest Comments</h2>    
+    <div class="list">
+        {{for comment in latest_comments:}}
+        {{
+        author = comment.comment.r_name
+        email = comment.comment.r_email
+        content = comment.comment.content
+        posted_on = comment.linked_on
+        record_id = comment.record_id
+        page = get_page(record_id)
+        }}
+    <div class="list-header">
+        <small>
+            {{=A("(delete)", _href=URL(r=request, f='delete_comment', 
+                args=comment.comment.id, 
+            ))}}
+            {{=posted_on.strftime("%Y-%m-%d")}}
+        </small>
+        {{=A(author or 'Anon', _href="mailto:%s" % email)}}<em class="em"> on {{=page.title}}</em>
+        {{=A("(edit)", _href=URL(r=request, c='admin', f='edit_comment', args=comment.comment.id))}}
+        {{=A("(reply)", _href=get_permalink(page)+"?content=@%s#respond" % author)}}
+    </div>
+    <div class="content">
+        {{=WIKI(content)}}
+    </div>
+    {{pass}}
+    </div>
+</div>
+
+<div class="clear"></div>
+</div>

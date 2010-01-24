@@ -1,0 +1,13 @@
+syntax: regexp
+databases/
+errors/
+sessions/
+cache/
+uploads/
+
+syntax: glob
+*.pyc
+*~
+*brunstworth*
+src/static/img/bg.jpg
+src/static/img/logo.png

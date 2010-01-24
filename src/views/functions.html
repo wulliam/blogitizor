@@ -1,0 +1,133 @@
+{{
+def print_tags(tags, link):
+    for i in tags:
+        response.write(A(i.tag.name, _href=link+'/'+i.tag.name, _class="tag"), escape=False)
+    pass
+pass
+def print_categories(cats, link):
+    index = 0
+    length = len(cats)
+    for i in cats:
+        response.write(A(dbcategory[int(i)].name, _href=link+'/'+dbcategory[int(i)].name), escape=False)
+        index += 1
+        if not index == length:
+            response.write(', ', escape=False)
+        pass
+    pass
+pass
+}}
+
+{{def list_pages(rows, snip=2000, use_permalink=False):}}
+    <div id="page_listing">
+    {{for page in rows:}}
+        <div class="page">
+            {{
+            if use_permalink:
+                url = URL(r=request, c=WEBLOG, f='archive', 
+                    args=[page.posted_on.year, page.posted_on.month,
+                            page.posted_on.day, page.slug, page.id]
+                )
+            else:
+                url = URL(r=request, c=WEBLOG, f='view', args=page.slug)
+                pass
+            }}
+        
+            <h3><a href="{{=url}}">{{=page.title}}</a></h3>
+            <h4>
+                self.created: <span class="datetime">
+                            <span class="month">{{=page.posted_on.strftime("%b")}}</span>
+                            <span class="day">{{=page.posted_on.strftime("%d")}}</span>
+                            <span class="year">{{=page.posted_on.strftime("%Y")}}</span>
+                            <span class="time">{{=page.posted_on.strftime("%I:%M %p")}}</span>
+                         </span> 
+                | {{=plugin_comments_for('page', page.id).count()}} comments
+                <br />
+                 self.isinstance({{print_categories(get_categories(page), URL(r=request, c=WEBLOG, f='category'))}})
+            </h4>
+            <div class="content">
+                {{#=XML(WIKI(__highlight__(page.content[:snip], linenos=False)))}}
+                {{#=XML(__highlight__(page.content[:snip], linenos=False))}}
+                {{=WIKI(page.content[:snip], extras={
+                    'code-color': {'noclasses': True},
+                    'footnotes': None,
+                    'code-friendly': None,
+                })
+            }}
+                {{if snip != -1:}}
+                    {{=A('{...(more)...}', _href=url)}}
+                {{pass}}
+            </div>
+            <div class="tags">
+                {{
+                url = URL(r=request, c=WEBLOG, f='tag')
+                print_tags(plugin_tagging_get_tags('page', page.id), url)
+                }}
+                <div style="clear: both"></div>
+            </div>
+        </div>
+    {{pass}}
+    {{if response.paginate_links:}}
+        <div class="pagination">
+            <div class="paginate_back">
+                {{=response.paginate_links[0]}}
+            </div>
+            <div class="paginate_forw">
+                {{=response.paginate_links[1]}}
+            </div>
+            <div class="paginate_loc">
+                {{=response.paginate_links[2]}}
+            </div>
+        </div>
+    {{pass}}
+    </div>
+{{pass}}
+{{def full_page(page, comments=False):}}
+    <div id="full_page">
+    <div class="page">
+        {{=A("permalink", _style="float: right; margin-left: 1.2em;", _href=URL(r=request, c=WEBLOG, f='archive', args=[page.posted_on.year, page.posted_on.month, page.posted_on.day, page.slug, page.id]))}}
+        
+        {{if auth.is_logged_in():}}
+        <a style="float: right;" href="{{=URL(r=request, c='admin', f='create', args=[page.type, page.slug])}}">edit</a>
+        {{pass}}
+        
+        <h2><a href="{{=get_permalink(page)}}">{{=page.title}}</a></h2>
+        <div class="meta">
+            <div class="tags">
+                {{
+                tags = plugin_tagging_get_tags('page', page.id)
+                print_tags(tags, URL(r=request, c=WEBLOG, f='tag'))
+                }}
+            </div>
+            <h4>
+                self.created: <span class="datetime">
+                            <span class="month">{{=page.posted_on.strftime("%b")}}</span>
+                            <span class="day">{{=page.posted_on.strftime("%d")}}</span>
+                            <span class="year">{{=page.posted_on.strftime("%Y")}}</span>
+                            <span class="time">{{=page.posted_on.strftime("%I:%M %p")}}</span>
+                         </span>
+                <br />
+                    self.isinstance({{print_categories(get_categories(page), URL(r=request, c=WEBLOG, f='category'))}})
+                <br />
+                {{if comments:}}
+                    {{=plugin_comments_for('page', page.id).count()}} comments | <a href="{{=URL(r=request, c=WEBLOG, f='feed.rss', args=page.slug)}}">feed</a>
+                {{pass}}
+                <br />
+            </h4>
+        </div>
+        <div class="content">
+           {{#optionally wrap wiki with safe_mode=False and XML sanitize=True}}
+            {{=WIKI(page.content, extras={
+                    'code-color': {'noclasses': True},
+                    'footnotes': None,
+                    'code-friendly': None,
+                })
+            }}
+            {{#XML(__highlight__(page.content, linenos=False))}}
+            
+        </div>
+        {{if comments:}}
+            {{=plugin_comments_load('page', page.id)}}
+        {{pass}}
+    </div>
+    </div>
+{{pass}}

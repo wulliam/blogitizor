@@ -1,0 +1,29 @@
+{{extend 'layout.html'}}
+
+{{include 'functions.html'}}
+
+{{if pages:}}
+
+    <div id="get_rss" style="float: right;">
+        <a href="{{=URL(r=request, c=WEBLOG, f='feed.rss', args=['category', category])}}">
+            <img border="0" src="{{=URL(r=request, c='static', f='img/feeds/2_sm.png')}}"/>
+        </a>
+    </div>
+
+    <h2>[{Category: {{=category}}}]</h2>
+
+    {{list_pages(pages)}}
+    
+{{else:}}
+    
+    <h2>[{Category listing}]</h2>
+    
+    <ul>
+                        {{for cat in response.categories:
+                                title = cat[0]
+                                count = cat[1]
+                                url = cat[2]
+                        }}<li>{{=A(title, _href=url)}}({{=count}})</li>
+                        {{pass}}
+                        </ul>
+{{pass}}

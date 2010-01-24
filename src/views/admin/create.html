@@ -1,0 +1,332 @@
+{{extend 'admin/layout.html'}}
+{{
+    manager.include(URL(r=request, c='static', f='js/jquery.textarea.resizer/jquery.textarearesizer.compressed.js'))
+    manager.include(URL(r=request, c='static', f='js/jquery.textarea.resizer/jquery.textarearesizer.css'))
+}}
+<script>
+
+function add_category() {
+    $("#dia_add").hide();
+    $("#dia_add").dialog({
+        bgiframe: true,
+        autoOpen: false,
+        height: 400,
+        modal: true,
+        resizable: false,
+        draggable: false,
+        buttons: {
+            'Add': function(){
+                $.ajax({type:"POST",
+                    url:"{{=URL(r=request, f='add_category.json')}}",
+                    data: $("#dia_add form").serialize(),
+                    success: function(json_txt) {
+                        var data = eval('(' + json_txt + ')');
+                       /* $("#no_table_categories").append("<option value=\""+data.node_id+"\">"+data.node_name+"</option>");
+                      */  $(".root").append("<div class=\"root_branch\"><input type=\"checkbox\" value=\""+data.node_id+"\" name=\"categories\" />"+data.node_name+"</div>");
+                        $(".root_branch:last").effect("highlight", {}, 2000);
+                        
+                        $("#no_table_categories").val(data.node_id);
+                        $("#dia_add").dialog('close');
+                    },
+                    error: function(html) {
+                        alert(" there were errors ");
+                    }
+                });
+            },
+            Cancel: function(){
+                $(this).dialog('close');
+            }
+        },
+        close: function() {}
+    });
+    
+    $("#btn_add").live("click", function(){
+            $(this).toggleClass("ui-state-focus");
+            $.ajax({type:"POST", 
+                    url:"{{=URL(r=request, f='add_category')}}",
+                    success: function(html){
+                        $("#dia_add").html(html).dialog('open');
+                    }
+            });    
+            $(this).toggleClass("ui-state-focus");                    
+    });
+    $("#btn_add").live("mouseover", function(){
+            $(this).toggleClass("ui-state-hover");                       
+    });
+    $("#btn_add").live("mouseout", function(){
+            $(this).toggleClass("ui-state-hover");                       
+    });
+}
+
+function add_upload() {
+    $("#dia_upload").hide();
+    $("#dia_upload").dialog({
+        bgiframe: true,
+        autoOpen: false,
+        height: 400,
+        width: 450,
+        modal: true,
+        resizable: false,
+        draggable: false,
+        buttons: {
+            'Done': function(){
+                $.ajax({type:"POST",
+                    url:"{{=URL(r=request, f='uploaded_files.json', args=form.record_id if form.record_id else '')}}",
+                    success: function(json_txt) {
+                        var data = eval('(' + json_txt + ')');
+                        
+                        $("#file_links ul").fadeOut().html("<li><h3>Uploaded Files</h3></li>");
+                        
+                        for (var key in data.links) {
+                            var t = data.links[key].title;
+                            var f = data.links[key].uploaded_data;
+                            $("#file_links ul").append('<li><h4>'+t+'<a href="{{=URL(r=request, c='default', f='download')}}/'+f+'"> __file_url()</a></h4></li>');
+                        }
+                        
+                        $("#file_links ul").fadeIn();
+                        
+                        $("#dia_upload").dialog('close');
+                    },
+                });
+            },
+            Cancel: function(){
+                $(this).dialog('close');
+            }
+        },
+        close: function() {}
+    });
+    
+    $("#btn_upload").live("click", function(){
+            $(this).toggleClass("ui-state-focus");
+            $("#dia_upload").html('<iframe src={{=URL(r=request, f='upload_file_iframe', args=form.record_id if form.record_id else '')}} width="95%" height="95%"><iframe>').dialog('open');  
+            $(this).toggleClass("ui-state-focus");                    
+    });
+    $("#btn_upload").live("mouseover", function(){
+            $(this).toggleClass("ui-state-hover");                       
+    });
+    $("#btn_upload").live("mouseout", function(){
+            $(this).toggleClass("ui-state-hover");                       
+    });
+}
+
+function add_link() {
+    $("#dia_link").hide();
+    $("#dia_link").dialog({
+        bgiframe: true,
+        autoOpen: false,
+        height: 250,
+        width: 450,
+        modal: true,
+        resizable: false,
+        draggable: false,
+        buttons: {
+            'Done': function(){
+                $.ajax({type:"POST",
+                    url:"{{=URL(r=request, f='uploaded_files.json', args=form.record_id if form.record_id else '')}}",
+                    success: function(json_txt) {
+                        var data = eval('(' + json_txt + ')');
+                        
+                        $("#file_links ul").fadeOut().html("<li><h3>Uploaded Files</h3></li>");
+                        
+                        for (var key in data.links) {
+                            var t = data.links[key].title;
+                            var f = data.links[key].uploaded_data;
+							var i = data.links[key].id;
+                            $("#file_links ul").append('<li><h4>'+t+'<a href="{{=URL(r=request, c='default', f='download')}}/'+i+'"> __file_url()</a></h4></li>');
+                        }
+                        
+                        $("#file_links ul").fadeIn();
+                        
+                        $("#dia_link").dialog('close');
+                    },
+                });
+            },
+            Cancel: function(){
+                $(this).dialog('close');
+            }
+        },
+        close: function() {}
+    });
+    
+    $("#btn_link").live("click", function(){
+            $(this).toggleClass("ui-state-focus");
+            $("#dia_link").html('<iframe src={{=URL(r=request, f='link_file', args=form.record_id if form.record_id else '')}} width="95%" height="95%"><iframe>').dialog('open');  
+            $(this).toggleClass("ui-state-focus");                    
+    });
+    $("#btn_link").live("mouseover", function(){
+            $(this).toggleClass("ui-state-hover");                       
+    });
+    $("#btn_link").live("mouseout", function(){
+            $(this).toggleClass("ui-state-hover");                       
+    });
+}
+
+function autoslug(){
+    if ($("#no_table_title").val() == "") {
+        $("#no_table_title").keyup(function(){
+            txt = this.value.replace(/\s/g, '_');
+            txt = txt.replace(/[^\w]+/g, '');
+            $("#no_table_slug").val(txt.toLowerCase());
+        });
+    }
+}
+
+$(document).ready(function(){
+    add_category();
+    add_upload();
+    add_link();
+    
+    autoslug();
+	
+	
+    $("#tabs").tabs({
+		collapsible: true,
+	});
+	
+	$('textarea.resizable:not(.processed)').TextAreaResizer();
+	$('iframe.resizable:not(.processed)').TextAreaResizer();
+	
+});
+
+var wmd_options = {
+    buttons: "{{=markdown.wmd_btn}}",
+};
+
+function hidePreview(e){
+    $("#edit_preview").slideUp();
+}
+
+function showPreview(e){
+    {{prv = markdown.wmd_prv}}
+    ajax('{{=prv}}', ['no_table_content'], 'edit_preview');
+    $("#edit_preview").slideDown();
+}
+</script>
+
+
+{{def req():}}<span class="required">*</span>{{return}}
+
+{{def labels(field, required):}}
+                <label for="{{=field}}" id="{{=field}}__label" class="title">{{=form.custom.label[field]}}{{if required:}}{{=req()}}{{pass}}</label>
+                <label for="{{=field}}" id="{{=field}}__comment" class="comment">{{=form.custom.comment[field]}}</label>
+                <label for="{{=field}}" id="{{=field}}__error" class="error">{{if form.errors.has_key(field):}}{{=form.errors[field]}}{{pass}}</label>
+{{pass}}
+
+{{def li(field, required=False):}}
+        <li id="{{=field}}__li">
+            <div class="labels">
+                {{labels(field, required)}}
+            </div>
+            {{=form.custom.widget[field]}}
+        </li>
+{{pass}}
+
+
+<div id="page_admin">
+
+
+	<div id="dia_add" title="Add A New Category">
+	
+	</div>
+	
+	<div id="dia_upload" title="Upload File">
+	
+	</div>
+	
+	<div id="dia_link" title="Manage Files">
+	
+	</div>
+	
+	<div id="dia_add_screen" title="Add A New Screenshot">
+	
+	</div>
+	
+	<div id="edit_preview" class="wmd_preview" onclick="hidePreview(this);">
+	
+	</div>
+
+    <h2>def create({{=area.capitalize()}})</h2>
+    {{=form.custom.begin}}
+        <div id="meta">
+            <ol>
+                <li id="postit">
+                    <input type="submit" class="submit ui-state-default ui-corner-all" value="Post" />
+                </li>
+                {{li('title')}}
+                <li>
+                    <div id="tabs">
+                        <ul>
+                            <li><a href="#tabs-4">Content</a></li>
+                            <li><a href="#tabs-1">Meta</a></li>
+                            {{if area =='project' and form.record_id:}}
+                            <li><a href="#tabs-2">Screenshots</a></li>
+                            {{pass}}
+                        </ul>
+                        {{if area == 'project' and form.record_id:}}
+                            <div id="tabs-2">
+                                <button id="btn_add_screen" class="ui-state-default ui-corner-all" type="button">Add</button>
+                                {{
+                                    screenshots = qry_screenshot_for(form.record_id)
+                                    for shot in screenshots:
+                                }}
+                                    {{=shot.filename}}    
+                                {{pass}}
+                            </div>
+                        {{pass}}
+                        
+                        <div id="tabs-1">
+                            <div class="left_side">
+                                <li>
+                                    <div class="labels">
+                                        {{labels("categories", False)}}
+                                        <button id="btn_add" class="ui-state-default ui-corner-all" type="button">Add</button>
+                                    </div>
+                                </li>
+                                <div style="clear: both;"></div>
+                                <li>
+                                {{=form.custom.widget["categories"]}}
+                                </li>
+                            </div>
+                            <div class="rdight_side">
+                                {{li('tags')}}  
+                                {{li('slug')}}
+                                {{li('status')}}
+								{{li('posted_on')}}
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div id="tabs-4">
+                            <div class="padding">
+                                {{=form.custom.widget.content}}
+                                
+                                <div id="file_links">
+                                    <p>
+                                        <button id="btn_upload" class="ui-state-default ui-corner-all" type="button">Upload File</button>
+                                        <button id="btn_link" class="ui-state-default ui-corner-all" type="button">Link File</button>
+                                    </p>
+                                    <ul>
+                                        <li><h3>Uploaded Files</h3></li>
+                                    {{if file_links:}}
+                                        {{for fl in file_links:}}
+                                            <li>
+                                                <h4>{{=fl.file.title}}
+                                                {{=A("__file_url()", _href=URL(r=request, c='default', f='download', args=fl.file.id))}}</h4>
+                                            </li>
+                                        {{pass}}
+                                    {{pass}}
+                                    </ul>
+                                </div>
+                            </div>
+                            {{=INPUT(_type='button', _value='Preview', _onclick='showPreview(this);')}}
+                        </div>
+                    </div>
+                </li>
+                <li>
+                </li>
+            </ol>
+        </div>
+    {{=form.custom.end}}
+</div>
+
+<script src="{{=markdown.wmd_loc}}"></script>
+

@@ -1,0 +1,69 @@
+{{extend 'layout.html'}}
+
+{{include 'functions.html'}}
+
+{{if len(results) > 0:}}
+
+    <h2>{{=A("Archive", _href=URL(r=request, args=[]))}} for [
+    {{if archive['year']:}}
+        {{=A(archive['year'], _href=URL(r=request, args=archive['year']))}},
+    {{pass}}
+    {{if archive['month']:}}
+        {{=A(archive['month'], _href=URL(r=request, args=[archive['year'], archive['month']]))}},
+    {{pass}}
+    {{if archive['day']:}}
+        {{=A(archive['day'], _href=URL(r=request, args=[archive['year'], archive['month'], archive['day']]))}},
+    {{pass}}
+    {{if archive['page_id']:}}
+        {{=archive['page_id']}},
+    {{pass}}
+    ]</h2>
+
+    {{if len(results) > 1:}}
+        {{list_pages(results, use_permalink=True)}}
+    {{elif len(results) == 1:}}
+        {{full_page(results.first(), True)}}
+    {{pass}}
+    
+{{else:}}
+<div id="archive">
+    <h2>Date Based Permalink Archive</h2>
+    {{
+        months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    
+        rows = db(qry_blog).select(orderby=~db.page.posted_on)
+        
+        last_year = 0
+        last_month = 0
+        last_day = 0        
+    }}
+    {{
+        for row in rows:
+            if row.posted_on.year != last_year:}}
+                {{if last_year != 0:}}</div><div style="clear: both"></div>{{pass}}
+                {{if last_month != 0:}}</div>{{pass}}
+                {{
+                last_year = row.posted_on.year
+                last_month = 0
+                last_day = 0
+                }}
+                <div class="archive-year"><div class="archive-title">{{=A(last_year, _href=URL(r=request, args=last_year))}}</div>
+                {{
+            pass
+            if row.posted_on.month != last_month:}}
+                {{if last_month != 0:}}</div>{{pass}}{{
+                last_month = row.posted_on.month
+                last_day = 0
+                }}
+                <div class="archive-month"><div class="archive-title">{{=A(months[last_month-1], _href=URL(r=request, args=[last_year, last_month]))}}</div>
+                {{
+            pass   
+            if row.posted_on.day != last_day:
+                last_day = row.posted_on.day}}
+                <div class="archive-day"><div class="archive-title">{{=A(last_day, _href=URL(r=request, args=[last_year, last_month, last_day]))}}</div></div>
+                {{
+            pass
+        pass
+    }}</div><div style="clear: both"></div></div>
+</div>
+{{pass}}

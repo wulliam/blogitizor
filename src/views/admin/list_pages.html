@@ -1,0 +1,33 @@
+{{ extend 'admin/layout.html' }}
+
+<h2>Listing of all pages</h2>
+
+<div class="list">
+    <p>
+    Post a new {{=A("Page", _href=URL(r=request, c='admin', f='create', args='page'))}}
+    </p>
+    <p>
+    Post a new {{=A("Post", _href=URL(r=request, c='admin', f='create', args='post'))}}
+    </p>    
+    {{paginate()}}
+    <div class="list-header">
+        <div class="head title">Title</div>
+        {{for i in ['Posted On', 'Type', 'Status']:}}
+        <div class="head">{{=i}}</div>        
+        {{pass}}
+        <div class="clear"></div>
+    </div>
+    {{for page in pages:}}
+        <ul>
+            <li>
+                <div class="item title">{{=A(page.title, _href=URL(r=request, f='create', args=[page.type, page.slug]))}}</div>
+                <div class="item">{{=page.posted_on.strftime("%Y-%m-%d %I:%M %p")}}</div>
+                <div class="item">{{=page.type.capitalize()}}</div>
+                <div class="item">{{=page.status.capitalize()}}</div>
+                <div class="clear"></div>
+            </li>
+        </ul>
+    {{pass}}
+    
+    {{paginate()}}
+</div>

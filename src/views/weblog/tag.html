@@ -1,0 +1,15 @@
+{{extend 'layout.html'}}
+
+{{include 'functions.html'}}
+
+{{if len(pages) > 0:}}
+
+    <h2>[{Tag: {{=', '.join(tag for tag in request.args)}}}]</h2>
+
+    {{list_pages(pages)}}
+    
+{{else:}}
+
+    <h2>Future home of a tag cloud!</h2>
+
+{{pass}}

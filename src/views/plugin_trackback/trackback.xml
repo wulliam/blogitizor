@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+{{if status == 'Error':}}
+    <error>1</error>
+    <message>{{=message}}</message>
+{{else:}}
+    <error>0</error>
+{{pass}}
+</response>

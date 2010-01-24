@@ -1,0 +1,33 @@
+{{ extend 'admin/layout.html' }}
+
+<h2>Listing of all comments</h2>
+
+<div class="list">
+{{paginate()}}
+    {{for comment in comments:}}
+        {{
+        author = comment.comment.r_name
+        email = comment.comment.r_email
+        content = comment.comment.content
+        posted_on = comment.linked_on
+        record_id = comment.record_id
+        page = get_page(record_id)
+        }}
+    <div class="list-header">
+        <small>
+            {{=A("(delete)", _href=URL(r=request, f='delete_comment', 
+                args=comment.comment.id, 
+            ))}}
+            {{=posted_on.strftime("%Y-%m-%d %I:%M %p")}}
+        </small>
+        {{=A(author or 'Anon', _href="mailto:%s" % email)}}<em class="em"> on {{=page.title}}</em>
+        {{=A("(edit)", _href=URL(r=request, c='admin', f='edit_comment', args=comment.comment.id))}}
+        {{=A("(reply)", _href=get_permalink(page)+"?content=@%s#respond" % author)}}
+    </div>
+    <div class="content">
+        {{=WIKI(content)}}
+    </div>
+    {{pass}}
+{{paginate()}}
+</div>
+

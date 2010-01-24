@@ -1,0 +1,25 @@
+{{ extend 'admin/layout.html' }}
+
+<h2>{{if file:}}Edit{{else:}}Upload{{pass}} File
+<small>{{=A("(back)", _href=URL(r=request, f='list_files'))}}</small>
+{{if file:}}
+    <small style="float: right;">
+    {{=A("(delete)", _href=URL(r=request, f='delete_file', 
+                    args=file.id, 
+                ))}}</small>
+{{pass}}
+</h2>
+
+<div class="list">
+{{=form.custom.begin}}
+{{for field in form.fields:}}
+<p>
+    {{=form.custom.label[field]}}
+    {{=form.custom.widget[field]}}
+    <small>{{=form.custom.comment[field]}}</small>
+</p>
+{{pass}}
+<button type="submit" class="submit">Submit</button> or <small>{{=A("cancel", _href=URL(r=request, f='list_files'))}}</small>
+
+{{=form.custom.end}}
+</div>

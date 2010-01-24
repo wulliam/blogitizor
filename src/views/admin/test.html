@@ -1,0 +1,88 @@
+{{ extend 'admin/layout.html' }}
+{{ include 'admin/functions.html' }}
+
+<h2> Main Control Interface </h2>
+
+<div class="list">
+    <p class="intro">
+    Welcome to your new adminstration interface. Below are the options you can perform.
+    </p>
+    
+    <div class="list-header">
+        <small>weblog.pages</small>
+        Pages
+        <em class="em">ver. 1.23</em>
+    </div>
+    <div class="content">
+        <p>
+            This module will allow you to create and edit blog posts
+            This is a very simple module of course.
+            </p><p>
+            But we like it nonetheless
+        </p>
+        Find it <a href="#">HERE</a>
+    </div>
+</div>
+<div class="list">
+    <div class="list-header">
+        <div class="head title">Title</div>
+        <div class="head">Status</div>
+        <div class="head">Owner</div>
+        <div class="head">Updated</div>
+        <div style="clear: both"></div>
+    </div>
+    <ul>
+        <li class="has-childs">
+            <div class="item title">This has a very long post title"</div>
+            <div class="item">Awaiting Approval</div>
+            <div class="item">Thadeus</div>
+            <div class="item">Yesterday</div>
+            <div style="clear: both"></div>
+        </li>
+    </ul>
+    <ul>
+        <li class="has-childs">
+            <div class="item title">A short title</div>
+            <div class="item">Completed</div>
+            <div class="item">Thadeus</div>
+            <div class="item">Today</div>
+            <div style="clear: both"></div>
+        </li>
+    </ul>
+    
+    Add a new <a href="#">Page</a> <small>or</small> a <a href="#">Post</a>
+</div>
+
+<h2>Configuration</h2>
+
+<div id="tabs">
+    <ul class="ui-tabs-nav">
+        <li><a href="#one">Site Information</a></li>
+        <li><a href="#two">Plugins Installed</a></li>
+    </ul>
+	<div id="one">
+		<form action="#">
+			<p><label for="site_name">Site Name</label>
+			<input id="site_name"></input>
+			<small>The name of your blog</small></p>
+			<p>
+			<label for="site_desc">Site Description</label>
+			<textarea></textarea>
+			<small>The description of your blog</small>
+			</p>
+			<button type="submit">Submit</button> or <small><a href="#">cancel</a></small>
+		</form>
+	</div>
+	<div id="two">
+		more info
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+    
+    $("#tabs").tabs({
+		collapsible: false	});
+	
+});
+</script>

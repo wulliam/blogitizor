@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Template Design by TheWebhub.com | http://www.thewebhub.com | Released for free under a Creative Commons Attribution-Share Alike 3.0 Philippines -->
+<head>
+
+        <!--
+            META INFO
+        -->
+
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+
+        <title>{{=response.title or response.action.capitalize()}} > {{=request.controller.capitalize()}} > ThadeusB</title>
+
+
+        <meta name="author" content="{{=response.author}}" />
+        <meta name="description" content="{{=response.meta.description}}" />
+        <meta name="keywords" content="{{=response.meta.keywords}}" />
+
+        <meta name="robots" content="index, follow, noarchive" />
+        <meta name="googlebot" content="noarchive" />
+
+
+        <link rel="shortcut icon" href="{{=URL(r=request, c='static', f='favicon.ico')}}" type="image/x-icon" />
+
+        <!--
+            OPEN ID & NETWORKING
+        -->
+
+        <link rel="meta" type="application/rdf+xml" title="FOAF" href="{{=URL(r=request, c='static', f='foaf.rdf')}}" />
+
+        {{if 'page' in globals():}}
+            {{=plugin_linkback_rdf(
+                    get_permalink(page),
+                    page.title,
+                    URL(r=request, c=WEBLOG, f='trackback', args=[page.id]),
+            )}}
+            <link rel="trackback" href="{{=URL(r=request, c=WEBLOG, f='trackback', args=[page.id])}}">
+        {{pass}}
+
+        <!--
+            RSS FEEDS, LINKS, and SEO
+        -->
+
+        <link rel="index" title="{{=response.site_name}}" href="{{=URL(r=request, c='default', f='index')}}" />
+
+        <link rel="alternate" type="application/rss+xml" title="Latest Posts" href="{{=URL(r=request, c=WEBLOG, f='feed.rss')}}" />
+        <link rel="alternate" type="application/rss+xml" title="Latest Comments" href="{{=URL(r=request, c='plugin_comments', f='feed.rss')}}" />
+
+        {{if 'page' in globals():}}
+            {{if page.type == 'post':}}
+        <link rel="alternate" title="Comments for {{=page.title}}" type="application/rss+xml"
+            href="{{=URL(r=request, c=WEBLOG, f='feed.rss', args=page.slug)}}" />
+            {{pass}}
+        {{pass}}
+        {{if 'category' in globals():}}
+            <link rel="alternate" title="Posts in Category {{=category}}" type="application/rss+xml"
+                href="{{=URL(r=request, c=WEBLOG, f='feed.rss', args=['category', category])}}">
+        {{pass}}
+    </a>
+</div>
+        <!--
+            CSS STYLESHEETS
+        -->
+
+        <!--<link rel="stylesheet" type="text/css" href="reset.css" />-->
+		<link rel="stylesheet" type="text/css" href="{{=URL(r=request, c='static', f='css/efflorescenceorange/efflorescenceorange.css')}}" media="screen" />
+
+        <!--
+            JAVASCRIPT
+        -->
+
+        <!--
+            JAVASCRIPT FONTS
+        -->
+
+        <!--
+            INCLUDES
+        -->
+        {{
+	        manager.require_cdn("jquery")
+	        #manager.require_cdn("jquery.ui")
+	        #manager.require_cdn("jquery.ui.theme.redmond")
+	    }}
+
+	    {{=manager.xml(False)}}
+
+        {{include 'web2py_ajax.html'}}
+
+        <!--
+            GLOBAL SCRIPTS
+        -->
+
+        <script>
+        function checkWidth(){
+            if ($(window).width() < 900){
+                $('body').addClass('narrow');
+            } else {
+                $('body').removeClass('narrow');
+            }
+        }
+        $(document).ready(function() {
+            $("#qsearch").focus(function () {
+                $("#qsearch").select();
+            });
+
+
+			if(jQuery('.flash').html()!=''){
+				jQuery('.flash').slideDown('slow');
+				}
+			jQuery('.flash').click(function() {
+				jQuery(this).fadeOut('slow');
+				return false; });
+			setTimeout(
+				function(){
+				jQuery('.flash').fadeOut('slow');
+				}, 6000);
+
+
+	        web2py_height = "5";
+	        jQuery("#web2py #w2p_environ").hide();
+	        jQuery("#web2py .data").hide();
+	        jQuery("#web2py h2").bind("click", function() {
+	            jQuery("#web2py .data").slideUp();
+	            jQuery(this).next().slideDown();
+	        });
+	        jQuery("#web2py h1").bind("click", function() {
+	            if (web2py_height == "100"){
+	                web2py_height = "5";
+	            }else{
+	                web2py_height = "100";
+	            }
+	            jQuery("#web2py").css({
+	                "height": web2py_height + "%",
+	            });
+	            jQuery("#web2py #w2p_environ").slideToggle();
+	        });
+        });
+        </script>
+
+    </head> <!-- END HEAD -->
+<body>
+    <!--[if lt IE 8]>
+    <div style='border: 1px solid #F7941D; background: #FEEFDA; text-align: center; clear: both; height: 75px; position: relative;'>
+      <div style='position: absolute; right: 3px; top: 3px; font-family: courier new; font-weight: bold;'><a href='#' onclick='javascript:this.parentNode.parentNode.style.display="none"; return false;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-cornerx.jpg' style='border: none;' alt='Close this notice'/></a></div>
+      <div style='width: 640px; margin: 0 auto; text-align: left; padding: 0; overflow: hidden; color: black;'>
+        <div style='width: 75px; float: left;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-warning.jpg' alt='Warning!'/></div>
+        <div style='width: 275px; float: left; font-family: Arial, sans-serif;'>
+          <div style='font-size: 14px; font-weight: bold; margin-top: 12px;'>You are using an outdated browser</div>
+          <div style='font-size: 12px; margin-top: 6px; line-height: 12px;'>For a better experience using this site, please upgrade to a modern web browser.</div>
+        </div>
+        <div style='width: 75px; float: left;'><a href='http://www.firefox.com' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-firefox.jpg' style='border: none;' alt='Get Firefox 3.5'/></a></div>
+        <div style='width: 75px; float: left;'><a href='http://www.browserforthebetter.com/download.html' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-ie8.jpg' style='border: none;' alt='Get Internet Explorer 8'/></a></div>
+        <div style='width: 73px; float: left;'><a href='http://www.apple.com/safari/download/' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-safari.jpg' style='border: none;' alt='Get Safari 4'/></a></div>
+        <div style='float: left;'><a href='http://www.google.com/chrome' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-chrome.jpg' style='border: none;' alt='Get Google Chrome'/></a></div>
+      </div>
+    </div>
+    <![endif]-->
+<div id="header">
+	<h1>{{=response.site}}</h1>
+        <span id="slogan" style="color: white;">{{=response.subtitle}}</span>
+        <div class="flash">{{=response.flash or ''}}</div>
+</div>
+<div id="menu">
+        {{=menu.render_menu('main_nav', 'ul')}}
+</div>
+<div id="page">
+	<div id="page-top">
+		<div id="page-bottom">
+		<div>
+			<div id="sidebar">
+
+                            <form id="quick-search" action="{{=URL(r=request, c='search', f='index')}}" method="get" >
+                            <p>
+			                    <label for="q">Search:</label>
+			                    <input class="tbox" id="qsearch" type="text" name="q" value="Search..." title="Start typing and hit ENTER" />
+			                    <input class="btn" alt="Search" type="image" name="searchsubmit" title="Search" src="" />
+		                    </p>
+		                </form>
+				{{if response.display_sidebar:}}
+                                {{include response.sidebar_template}}
+                                {{pass}}
+			</div>
+			<div id="content">
+				{{include}}
+                        </div>
+		</div>
+		<div style="clear: both;">&nbsp;</div>
+	</div>
+	</div>
+</div>
+<div id="footer">
+	<p>Copyright © 2006 {{=response.site_name}} Template Designed by <a href="http://www.thewebhub.com">TheWebHub.com</a>. powered by <a href="http://www.web2py.com">web2py</a>.</p>
+</div>
+
+    	  {{=manager.xml(False)}}
+
+{{if not request.env.http_host.endswith('8000'):}}
+	  <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', '{{=configure.read('blogitizor', 'ga_tracker')}}']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+		})();
+	  </script>
+{{pass}}
+</body>
+</html>

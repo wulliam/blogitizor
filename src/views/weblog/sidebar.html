@@ -1,0 +1,68 @@
+                    {{if response.related_entries:}}
+                        <div class="block">
+                            <h4>suggest(related_entries)</h4>
+                            
+                            <ul>
+                                {{for re in response.related_entries:}}
+                                    <li><a href="{{=re[1]}}">{{=re[0]}}</a></li>
+                                {{pass}}
+                            </ul>
+                        
+                        </div>
+                    {{pass}}
+                    
+                    {{if response.related_tags or response.search_tags:}}
+                        <div class="block">
+                        {{if response.search_tags:}}
+                            <h4>search(tags)</h4>
+                            <form id="tag-search" action="{{=URL(r=request)}}" method="get" >
+                                <p>
+			                        <input class="tbox" id="search_tags" type="text" name="search_tags" value="{{=', '.join(arg for arg in request.args)}}" title="Start typing and hit ENTER" />
+			                        <input class="btn" alt="Search" type="image" name="searchsubmit" title="Search" src="/init/static/search.png" />
+		                        </p>
+		                    </form>
+                        {{pass}}
+                        {{if response.related_tags:}}
+                            <h4>related_tags()</h4>
+                            
+                            <div class="tags">
+                                {{for re in response.related_tags:}}
+                                    <a class="tag" href="{{=re[1]}}">{{=re[0]}}</a>
+                                {{pass}}
+                            </div>
+                            <div style="clear: both;"></div>
+                        {{pass}}
+                        </div>
+                    {{pass}}
+                    
+                    <div class="block">
+                        <h4>list_pages()</h4>
+                        <ul>
+                        {{for p in response.pages:
+                                title = p[0]
+                                active = p[1]
+                                url = p[2]
+                        }}<li>{{=A(title, _href=url)}}</li>		
+                        {{pass}}
+                        </ul>
+                        <h4>list_categories()</h4>
+                        <div id="sidebar-categories">
+                            {{=dbcategory.ul_list_widget()(URL(r=request, c=WEBLOG, f='category'), False)}}
+                        </div>
+                        
+                        <h4>cron: archive</h4>
+                        <ul>
+                            <li><a href="{{=URL(r=request, c=WEBLOG, f='archive')}}">Date Based Permalink Archive</a></li>
+                        </ul>
+                        <h4>fetch("RSS")</h4>
+                            <p>return [</p>
+                            <ul>
+                                <li>{{=A("blog", _href=URL(r=request, c='weblog', f='feed.rss'))}},</li>
+                                <li>{{=A("comment", _href=URL(r=request, c='plugin_comments', f='feed.rss'))}},</li>
+                            </ul>
+                            <p>]</p>
+                        <h4>__create()</h4>
+                        <ul>
+							<li>{{=A("__admin()", _href=URL(r=request, c='admin', f='index'))}}</li>
+                        </ul>
+                    </div>

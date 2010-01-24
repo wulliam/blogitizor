@@ -1,0 +1,23 @@
+{{ extend 'admin/layout.html' }}
+
+<h2>Editing comment {{=comment.id}} 
+<small>{{=A("(back)", _href=URL(r=request, f='list_comments'))}}</small>
+<small style="float: right;">
+{{=A("(delete)", _href=URL(r=request, f='delete_comment', 
+                args=comment.id, 
+            ))}}</small>
+</h2>
+
+<div class="list">
+{{=form.custom.begin}}
+{{for field in form.fields:}}
+<p>
+    {{=form.custom.label[field]}}
+    {{=form.custom.widget[field]}}
+    <small>{{=form.custom.comment[field]}}</small>
+</p>
+{{pass}}
+<button type="submit" class="submit">Submit</button> or <small>{{=A("cancel", _href=URL(r=request, f='list_comments'))}}</small>
+
+{{=form.custom.end}}
+</div>
