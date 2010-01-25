@@ -20,6 +20,7 @@ pass
 {{def list_pages(rows, snip=2000, use_permalink=False):}}
     <div id="page_listing">
     {{for page in rows:}}
+    {{if not page: continue}}
         <div class="page">
             {{
             if use_permalink:

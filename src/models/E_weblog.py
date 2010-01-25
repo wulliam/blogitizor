@@ -56,7 +56,7 @@ db.page.type.requires = IS_IN_SET(['post', 'page', 'project'])
 
 db.page.status.requires = IS_IN_SET(['draft', 'review', 'publish', 'stone'])
 
-db.page.categories.requires = dbcategory.requires(True)
+db.page.categories.requires = IS_NULL_OR(dbcategory.requires(True))
 db.page.categories.widget = dbcategory.checkboxes_widget()
 db.page.categories.represent = dbcategory.represent(', ')
 

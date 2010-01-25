@@ -87,7 +87,7 @@ class Pagination():
     def generate_links(self):
         self.backward = A('<< previous()', _href=URL(r=self.r, vars={'p': self.current - self.display_count})) if self.current else '<< previous(False)'
         self.forward = A('next() >>', _href=URL(r=self.r, vars={'p': self.current + self.display_count})) if self.total_results > self.current + self.display_count else 'next(False) >>'
-        self.location = 'Showing %d to %d out of %d records' % (self.current + 1, self.current + self.num_results, self.total_results)
+        self.location = 'Showing %d to %d out of %d records' % (min(self.current + 1, self.num_results), self.current + self.num_results, self.total_results)
         return (self.backward, self.forward, self.location)
 
 class Configure():

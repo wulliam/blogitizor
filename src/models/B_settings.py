@@ -21,7 +21,7 @@ utils = local_import('utils')
 # Non Database Global Settings
 ###########################################################
 if request.env.http_host.endswith('8000'):
-    dal_connection = 'sqlite://blogitizor.sqlite'
+    dal_connection = 'sqlite://thadeusb.sqlite'
     pool_size = 1
     cache.ram.clear()
     cache.disk.clear()
