@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Template Design by TheWebhub.com | http://www.thewebhub.com | Released for free under a Creative Commons Attribution-Share Alike 3.0 Philippines -->
+<head>
+
+        {{include "functions.html"}}
+
+        <!--
+            META INFO
+        -->
+
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+
+        <title>{{=response.title or response.action.capitalize()}} > {{=request.controller.capitalize()}} > {{=response.meta.title}}</title>
+
+
+        {{page_meta()}}
+
+        <meta name="robots" content="index, follow, noarchive" />
+        <meta name="googlebot" content="noarchive" />
+
+
+        <link rel="shortcut icon" href="{{=URL(r=request, c='static', f='favicon.ico')}}" type="image/x-icon" />
+
+        <!--
+            OPEN ID & NETWORKING
+        -->
+
+        {{open_id_networking()}}
+        <!--
+            RSS FEEDS, LINKS, and SEO
+        -->
+
+        {{rss_links_seo()}}
+        
+        
+        <!--
+            CSS STYLESHEETS
+        -->
+
+        <!--<link rel="stylesheet" type="text/css" href="reset.css" />-->
+		<link rel="stylesheet" type="text/css" href="{{=layout.static('efflorescenceorange.css')}}" media="screen" />
+
+        <!--
+            JAVASCRIPT
+        -->
+
+        <!--
+            INCLUDES
+        -->
+        {{javascripts()}}
+
+        <!--
+            GLOBAL SCRIPTS
+        -->
+
+        <script>
+        function checkWidth(){
+            if ($(window).width() < 900){
+                $('body').addClass('narrow');
+            } else {
+                $('body').removeClass('narrow');
+            }
+        }
+        $(document).ready(function() {
+            $("#qsearch").focus(function () {
+                $("#qsearch").select();
+            });
+
+
+			if(jQuery('.flash').html()!=''){
+				jQuery('.flash').slideDown('slow');
+				}
+			jQuery('.flash').click(function() {
+				jQuery(this).fadeOut('slow');
+				return false; });
+			setTimeout(
+				function(){
+				jQuery('.flash').fadeOut('slow');
+				}, 6000);
+
+
+	        web2py_height = "5";
+	        jQuery("#web2py #w2p_environ").hide();
+	        jQuery("#web2py .data").hide();
+	        jQuery("#web2py h2").bind("click", function() {
+	            jQuery("#web2py .data").slideUp();
+	            jQuery(this).next().slideDown();
+	        });
+	        jQuery("#web2py h1").bind("click", function() {
+	            if (web2py_height == "100"){
+	                web2py_height = "5";
+	            }else{
+	                web2py_height = "100";
+	            }
+	            jQuery("#web2py").css({
+	                "height": web2py_height + "%",
+	            });
+	            jQuery("#web2py #w2p_environ").slideToggle();
+	        });
+        });
+        </script>
+
+    </head> <!-- END HEAD -->
+<body>
+    {{ie8()}}
+<div id="header">
+	<h1>{{=response.meta.title}}</h1>
+        <span id="slogan" style="color: white;">{{=response.meta.subtitle}}</span>
+        <div class="flash">{{=response.flash or ''}}</div>
+</div>
+<div id="menu">
+        {{=menu.render_menu('main_nav', 'ul')}}
+</div>
+<div id="page">
+	<div id="page-top">
+		<div id="page-bottom">
+		<div>
+			<div id="sidebar">
+
+                            <form id="quick-search" action="{{=URL(r=request, c='search', f='index')}}" method="get" >
+                            <p>
+			                    <label for="q">Search:</label>
+			                    <input class="tbox" id="qsearch" type="text" name="q" value="Search..." title="Start typing and hit ENTER" />
+			                    <input class="btn" alt="Search" type="image" name="searchsubmit" title="Search" src="" />
+		                    </p>
+		                </form>
+				{{if response.display_sidebar:}}
+                                {{include response.sidebar_template}}
+                                {{pass}}
+			</div>
+			<div id="content">
+				{{include}}
+                        </div>
+		</div>
+		<div style="clear: both;">&nbsp;</div>
+	</div>
+	</div>
+</div>
+<div id="footer">
+	<p>Copyright © 2006 {{=response.meta.title}} Template Designed by <a href="http://www.thewebhub.com">TheWebHub.com</a>. powered by <a href="http://www.web2py.com">web2py</a>.</p>
+</div>
+
+    	  {{=manager.xml(False)}}
+
+{{gaq()}}
+</body>
+</html>

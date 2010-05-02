@@ -1,0 +1,37 @@
+dal_connection = 'sqlite://blogitizor.sqlite'
+
+hmac_key = '<insert secret unique long key here>'
+
+fixtures = {
+    'site-settings': {
+        'recaptcha_public'  :   '',
+        'recaptcha_private' :   '',
+        'mail_server'       :   'smtp.example.com:587',
+        'mail_sender'       :   'me@example.com',
+        'mail_login'        :   'me@example.com:superpassword',
+        'ga_tracker'        :   'UA-goog-tracker-key',
+    },  
+    'site-meta': {
+        'title'             :   'Blogitizor',
+        'subtitle'          :   'Yet another Blogitizor blog',
+        'author'            :   'Joe Smith <me@example.com>',
+        'keywords'          :   'web2py blog',        
+        'description'       :   'A place to blog',
+        'copyright'         :   'Copyright &copy;',
+    },
+    'openid': {
+        'provider'          :   '',
+        'local_id'          :   '',
+        'server'            :   '',
+        'delegate'          :   '',
+    },
+    'auth': {
+        'msg_verify_email'  :   '''
+                Thank you for joining blogitizor.
+                Click on the following link to verify your email.
+
+                {{=link}}
+        '''
+    }
+}
+
