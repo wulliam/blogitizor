@@ -1,9 +1,7 @@
-{{extend 'layout.html'}}
-
-{{include 'functions.html'}}
+{{extend layout()}}
 
 <div id="get_rss" style="float: right;">
-    <a href="{{=URL(r=request, c=WEBLOG, f='feed.rss')}}">
+    <a href="{{=URL(r=request, c='weblog', f='feed.rss')}}">
         <img border="0" src="{{=URL(r=request, c='static', f='img/feeds/2_sm.png')}}"/>
     </a>
 </div>

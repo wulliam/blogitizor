@@ -1,4 +1,4 @@
-{{ extend 'admin/layout.html' }}
+{{ extend layout() }}
 
 <h2>Editing comment {{=comment.id}} 
 <small>{{=A("(back)", _href=URL(r=request, f='list_comments'))}}</small>

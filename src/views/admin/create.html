@@ -1,4 +1,4 @@
-{{extend 'admin/layout.html'}}
+{{ extend layout() }}
 {{
     manager.include(URL(r=request, c='static', f='js/jquery.textarea.resizer/jquery.textarearesizer.compressed.js'))
     manager.include(URL(r=request, c='static', f='js/jquery.textarea.resizer/jquery.textarearesizer.css'))

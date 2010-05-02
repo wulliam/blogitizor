@@ -1,16 +1,5 @@
 # SETTINGS
 ###########################################################
-if 0:
-    from gluon.sql import *
-    from gluon.sqlhtml import *
-    from gluon.tools import *
-    from gluon.html import *
-    from gluon.http import *
-    from gluon.storage import *
-    from thadeusb.modules.utils import *
-    db = DAL
-    configure = Configure
-
 configure.verify('page', {
     'display_count': {
         'value': 4,
@@ -38,9 +27,9 @@ db.define_table('page',
 
 class Page():    
     def url(self):
-        return lambda: URL(r=request, c=WEBLOG, f='view', args=self.page.slug)
+        return lambda: URL(r=request, c='weblog', f='view', args=self.page.slug)
     def permalink(self):
-        return lambda: URL(r=request, c=WEBLOG, f='archive', args=[self.page.posted_on.year, self.page.posted_on.month, self.page.posted_on.day, self.page.slug, self.page.id])
+        return lambda: URL(r=request, c='weblog', f='archive', args=[self.page.posted_on.year, self.page.posted_on.month, self.page.posted_on.day, self.page.slug, self.page.id])
 
 db.page.virtualfields.append(Page())
     
@@ -56,11 +45,11 @@ db.page.type.requires = IS_IN_SET(['post', 'page', 'project'])
 
 db.page.status.requires = IS_IN_SET(['draft', 'review', 'publish', 'stone'])
 
-db.page.categories.requires = IS_NULL_OR(dbcategory.requires(True))
+db.page.categories.requires = dbcategory.requires(True)
 db.page.categories.widget = dbcategory.checkboxes_widget()
 db.page.categories.represent = dbcategory.represent(', ')
 
-db.page.content.widget = RESIZABLE.widget
+db.page.content.widget = widgets.Resizable.widget
 db.page.content.requires = IS_NOT_EMPTY()
 
 db.define_table('file',
@@ -95,7 +84,7 @@ def get_categories(page):
     return filter(lambda a: a != '', page.categories.split('|'))
 
 def get_permalink(page):
-    return URL(r=request, c=WEBLOG, f='archive', args=[page.posted_on.year, page.posted_on.month, page.posted_on.day, page.slug, page.id])
+    return URL(r=request, c='weblog', f='archive', args=[page.posted_on.year, page.posted_on.month, page.posted_on.day, page.slug, page.id])
 
 def get_page(record_id):
     return db(db.page.id == record_id).select().first()

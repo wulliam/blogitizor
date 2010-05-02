@@ -1,4 +1,4 @@
-{{extend 'layout.html'}}
+{{extend layout()}}
 
 <div id="search">
 
@@ -57,7 +57,7 @@
             {{for page in results['pages']:}}
                 <tr>
                     <td class='title'>
-                        {{=A(page.title, _href=URL(r=request, c=WEBLOG, f='view', args=page.slug))}}
+                        {{=A(page.title, _href=URL(r=request, c='weblog', f='view', args=page.slug))}}
                     </td>
                     <td class='pub_date'>
                         {{=page.posted_on}}

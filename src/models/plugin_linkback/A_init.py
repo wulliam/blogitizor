@@ -53,8 +53,8 @@ plugin_linkback.meta = {
 # functions. This exposes the reception of trackback form POST and
 # pingback xmlrpc handler.
 #
-plugin_linkback_pingback_server = "http://10.0.0.100:8000" + URL(r=request, c='plugin_linkback', f='call', args='xmlrpc')
-plugin_linkback_trackback_server = "http://10.0.0.100:8000" + URL(r=request, c='plugin_linkback', f='receive_trackback')
+plugin_linkback_pingback_server = request.env.http_host + URL(r=request, c='plugin_linkback', f='call', args='xmlrpc')
+plugin_linkback_trackback_server = request.env.http_host + URL(r=request, c='plugin_linkback', f='receive_trackback')
 
 #-----------------------------------------------------------------------
 

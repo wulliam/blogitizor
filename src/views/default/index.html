@@ -1,6 +1,4 @@
-{{extend 'layout.html'}}
-
-{{include 'functions.html'}}
+{{extend layout()}}
 
 {{
 
@@ -24,7 +22,7 @@ list_posts = latest_posts[1:]
     <h3>iterate(latest_posts, 5)</h3></li>
     {{for lp in list_posts:}}
         <li>
-            {{=A(lp.title, _href=URL(r=request, c=WEBLOG, f='view', args=lp.slug))}}
+            {{=A(lp.title, _href=URL(r=request, c='weblog', f='view', args=lp.slug))}}
             <br />
             {{=lp.posted_on}}
         </li>

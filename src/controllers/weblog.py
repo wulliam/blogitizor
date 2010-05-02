@@ -22,7 +22,7 @@ def response_pages(private=True):
                                 cache=(cache.disk, 1500))
     items = []
     for page in pages:
-        item = [page.title, False, URL(r=request, c=WEBLOG, f='view', args=page.slug)]
+        item = [page.title, False, URL(r=request, c='weblog', f='view', args=page.slug)]
         items.append(item)
     return items
 response.pages = cache.ram('res_pages', response_pages, time_expire=750)
@@ -33,7 +33,7 @@ def response_categories(private=True):
     for cat in categories:
         count = db(qry_blog)(db.page.categories.like("%|" + str(cat.id) + "|%")).count()
         if count > 0:
-            item = [cat.name, count, URL(r=request, c=WEBLOG, f='category', args=cat.name)]
+            item = [cat.name, count, URL(r=request, c='weblog', f='category', args=cat.name)]
             items.append(item)
     return items
 response.categories = cache.ram('res_cats', response_categories, time_expire=750)
@@ -43,7 +43,7 @@ response.categories = cache.ram('res_cats', response_categories, time_expire=750
 ###    PRIVATE FUNCTIONS
 ############ 
 
-w = utils.w
+w = web2py_utils.w
 
 #########################################
 ###    AJAX FUNCTIONS
@@ -63,7 +63,7 @@ def trackback():
         return dict(status = "Error", 
                     message = "Trackback target does not exist")
     
-    target_url = URL(r=request, c=WEBLOG, f='trackback', args=[page.id]),
+    target_url = URL(r=request, c='weblog', f='trackback', args=[page.id]),
     
     track = linkback.TrackbackServer()
     
@@ -101,7 +101,7 @@ def trackback():
 def index():
     response.title = "Index"
     
-    paginate = utils.Pagination(db, qry_blog, 
+    paginate = Pagination(db, qry_blog, 
                                 ~db.page.posted_on,
                                 r=request, res=response)
     pages = paginate.get_set()
@@ -125,7 +125,7 @@ def category():
                                
         query = db.page.categories.like(w('|'+str(cat.id)+'|'))
         
-        paginate = utils.Pagination(db, query & qry_blog, 
+        paginate = Pagination(db, query & qry_blog, 
                                     ~db.page.posted_on,
                                     r=request, res=response)
         
@@ -161,7 +161,7 @@ def tag():
                 query = query | (db.page.id == link.record_id)
             
             
-    paginate = utils.Pagination(db, query & qry_blog, 
+    paginate = Pagination(db, query & qry_blog, 
                                 ~db.page.posted_on, 
                                 r=request, res=response)
     pages = paginate.get_set()
@@ -246,7 +246,7 @@ def archive():
         
     if year:
         
-        paginate = utils.Pagination(db, query, 
+        paginate = Pagination(db, query, 
                                     ~db.page.posted_on, 
                                     r=request, res=response)
         results = paginate.get_set()
@@ -291,9 +291,9 @@ def archive():
 
 def feed():
     rss = {
-        'title': response.site_name + ' Blog Feed',
+        'title': 'ThadeusB Blog Feed',
         'link': 'http://'+request.env.http_host+'/'+request.application+'/weblog/feed.rss/',
-        'description': 'Latest blog posts from ' + response.site_name,
+        'description': 'Latest blog posts from Thadeus',
         'items': []
     }
     
@@ -339,7 +339,7 @@ def feed():
                     
             plugin_comments.settings.rss_link_dict['slug'] = page.slug
             
-            rss['title'] = response.site_name + ' Comment Feed'
+            rss['title'] = 'ThadeusB Comment Feed'
             rss['link'] = plugin_comments.settings.rss % ({'record_id': page.slug})
             rss['description'] = 'Latest comments on post %s' % page.title
             rss['items'] = plugin_comments_feed_items('page', page.id)

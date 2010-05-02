@@ -1,4 +1,4 @@
-{{ extend 'admin/layout.html' }}
+{{ extend admin_layout() }}
 
 <h2>{{if file:}}Edit{{else:}}Upload{{pass}} File
 <small>{{=A("(back)", _href=URL(r=request, f='list_files'))}}</small>

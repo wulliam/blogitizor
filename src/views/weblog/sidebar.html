@@ -47,12 +47,12 @@
                         </ul>
                         <h4>list_categories()</h4>
                         <div id="sidebar-categories">
-                            {{=dbcategory.ul_list_widget()(URL(r=request, c=WEBLOG, f='category'), False)}}
+                            {{=dbcategory.ul_list_widget()(URL(r=request, c='weblog', f='category'), False)}}
                         </div>
                         
                         <h4>cron: archive</h4>
                         <ul>
-                            <li><a href="{{=URL(r=request, c=WEBLOG, f='archive')}}">Date Based Permalink Archive</a></li>
+                            <li><a href="{{=URL(r=request, c='weblog', f='archive')}}">Date Based Permalink Archive</a></li>
                         </ul>
                         <h4>fetch("RSS")</h4>
                             <p>return [</p>

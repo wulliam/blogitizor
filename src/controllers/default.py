@@ -11,7 +11,7 @@ def index():
     latest_posts = db(qry_blog).select(orderby=~db.page.posted_on, limitby=(0, 6))
     
     response.accessories.append(WIKI("""
-Welcome to my web2py blogitizor blog.
+Hello World
     """))
     
     return dict(latest_posts=latest_posts)
@@ -23,10 +23,16 @@ def error():
     URLS that will need to be handled from wordpress.
     
     #POST
-    >>>/2009/04/15/wordpress-slug-example/
+    >>>/2009/04/15/pygame-font-and-py2exe/
     #ARCHIVES
     >>>/2009/04/
     /$year/$month/$day/$post_slug/
+    
+    #PROJECT PAGE
+    >>>/portfolioprojects/
+    >>>/portfolioprojects/space-invaders-java/
+    /$page/$subpage/
+    /$page/
     """
     if request.vars.requested_uri:
         uri = filter(lambda a: a != '', request.vars.requested_uri.split('/'))

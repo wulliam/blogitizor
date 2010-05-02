@@ -1,1 +1,52 @@
-/home/thadeusb/Workspace/Web/Blogitizor/src/views/efflorescenceorange.html
+<html>
+<head>
+    {{include "functions.html"}}
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>{{=response.title}} {{=response.meta.title}}</title>
+
+    {{page_meta()}}
+
+    {{open_id_networking()}}
+
+    {{rss_links_seo()}}
+
+    {{javascripts()}}
+
+    <script type="text/javascript" language="javascript" charset="utf-8">
+    // <![CDATA[
+        $(document).ready(function() {
+            if(jQuery('.flash').html()!=''){
+				jQuery('.flash').slideDown('slow');
+				}
+			jQuery('.flash').click(function() { 
+				jQuery(this).fadeOut('slow'); 
+				return false; });
+			setTimeout(
+				function(){
+				jQuery('.flash').fadeOut('slow');
+				}, 6000);
+        });
+    // ]]>
+    </script>
+
+    
+</head>
+<body id="ID" onload="">
+    {{ie8()}}
+    <div id="header">
+        <h1>{{=response.meta.title}}</h1>
+        <p>{{=response.meta.subtitle}}</p>
+        <div id="nav">
+            {{=menu.render_menu('main_nav')}}
+        </div>
+        <div class="flash">{{=response.flash}}</div>
+    </div>
+    <div id="main">
+        {{include}}
+    </div>
+    <div id="footer">
+        {{=response.meta.copyright}}
+    </div>    
+    {{gaq()}}
+</body>
+</html>

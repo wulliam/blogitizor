@@ -1,3 +1,185 @@
+{{def ie8():}}
+<!--[if lt IE 8]>
+    <div style='border: 1px solid #F7941D; background: #FEEFDA; text-align: center; clear: both; height: 75px; position: relative;'>
+      <div style='position: absolute; right: 3px; top: 3px; font-family: courier new; font-weight: bold;'><a href='#' onclick='javascript:this.parentNode.parentNode.style.display="none"; return false;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-cornerx.jpg' style='border: none;' alt='Close this notice'/></a></div>
+      <div style='width: 640px; margin: 0 auto; text-align: left; padding: 0; overflow: hidden; color: black;'>
+        <div style='width: 75px; float: left;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-warning.jpg' alt='Warning!'/></div>
+        <div style='width: 275px; float: left; font-family: Arial, sans-serif;'>
+          <div style='font-size: 14px; font-weight: bold; margin-top: 12px;'>You are using an outdated browser</div>
+          <div style='font-size: 12px; margin-top: 6px; line-height: 12px;'>For a better experience using this site, please upgrade to a modern web browser.</div>
+        </div>
+        <div style='width: 75px; float: left;'><a href='http://www.firefox.com' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-firefox.jpg' style='border: none;' alt='Get Firefox 3.5'/></a></div>
+        <div style='width: 75px; float: left;'><a href='http://www.browserforthebetter.com/download.html' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-ie8.jpg' style='border: none;' alt='Get Internet Explorer 8'/></a></div>
+        <div style='width: 73px; float: left;'><a href='http://www.apple.com/safari/download/' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-safari.jpg' style='border: none;' alt='Get Safari 4'/></a></div>
+        <div style='float: left;'><a href='http://www.google.com/chrome' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-chrome.jpg' style='border: none;' alt='Get Google Chrome'/></a></div>
+      </div>
+    </div>
+<![endif]-->
+{{pass}}
+
+{{def web2py_environment():}}
+<script type="text/javascript" language="javascript" charset="utf-8">
+// <![CDATA[
+    web2py_height = "5";
+	        jQuery("#web2py #w2p_environ").hide();
+	        jQuery("#web2py .data").hide();
+	        jQuery("#web2py h2").bind("click", function() {
+	            jQuery("#web2py .data").slideUp();
+	            jQuery(this).next().slideDown();
+	        });
+	        jQuery("#web2py h1").bind("click", function() {
+	            if (web2py_height == "100"){
+	                web2py_height = "5";
+	            }else{
+	                web2py_height = "100";
+	            }
+	            jQuery("#web2py").css({
+	                "height": web2py_height + "%",
+	            });
+	            jQuery("#web2py #w2p_environ").slideToggle();
+	        });
+// ]]>
+</script>
+<style type="text/css" media="screen">
+    /* <![CDATA[ */
+        
+    #web2py {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      height: 5%;
+      width: 25%;
+      background-color: #111111;
+      color: white;
+      overflow: auto;
+    }
+
+    #web2py h1 {
+      margin: 0;
+      padding: 0;
+    }
+
+    #web2py #w2p_environ {
+      position: absolute;
+      top: 50px;
+      left: 5px;
+      height: 100%;
+      width: 100%;
+      background-color: #111111;
+      color: white;
+    }
+
+    #web2py .data {
+      display: none;
+      overflow: auto;
+      position: relative;
+      height: 600px;
+      width: 100%;
+    }
+    /* ]]> */
+</style>
+
+<div id="web2py">
+        <h1>Web2py Environment</h1>
+        <div id="w2p_environ">
+            <div id="w2p_request">
+                <h2>Request</h2>
+                <div class="data">
+                    {{=BEAUTIFY(request)}}
+                </div>
+            </div>
+            
+            <div id="w2p_response">
+                <h2>Response</h2>
+                <div class="data">
+                    {{=BEAUTIFY(response)}}
+                </div>
+            </div>
+            
+            <div id="w2p_session">
+                <h2>Session</h2>
+                <div class="data">
+                    {{=BEAUTIFY(session)}}
+                </div>
+            </div>
+        </div>
+    </div>
+{{pass}}
+
+{{def javascripts():
+    manager.require_cdn("jquery")}}
+    {{=manager.xml()}}
+    {{include 'web2py_ajax.html'}}
+{{pass}}
+
+{{def page_meta():}}
+    <meta name="author" content="{{=response.meta.author}}" />
+    <meta name="description" content="{{=response.meta.description}}" />
+    <meta name="keywords" content="{{=response.meta.keywords}}" />
+{{pass}}
+
+{{def open_id_networking():}}
+    <!--
+        OPEN ID & NETWORKING
+    -->
+    <link rel="openid2.provider"    href="{{= configure.read('openid', 'provider') }}" />
+    <link rel="openid2.local_id"    href="{{= configure.read('openid', 'local_id') }}" />
+    <link rel="openid.server"       href="{{= configure.read('openid', 'server') }}" />
+    <link rel="openid.delegate"     href="{{= configure.read('openid', 'delegate') }}" />
+
+    <link rel="meta" type="application/rdf+xml" title="FOAF" href="{{=URL(c='static', f='foaf.rdf')}}" />
+
+    {{if 'page' in globals():}}
+            {{=plugin_linkback_rdf(
+                    get_permalink(page),
+                    page.title,
+                    URL(c='weblog', f='trackback', args=[page.id]),
+            )}}
+    <link rel="trackback" href="{{=URL(c='weblog', f='trackback', args=[page.id])}}">
+    {{pass}}
+{{pass}}
+
+
+{{def rss_links_seo():}}
+    <!--
+        RSS FEEDS, LINKS, and SEO
+    -->
+    <link rel="index" title="{{= response.meta.title }}" href="{{= request.env.http_host }}" />
+    <link rel="alternate" type="application/rss+xml" title="Latest Posts" href="{{=URL(c='weblog', f='feed.rss')}}" />
+    <link rel="alternate" type="application/rss+xml" title="Latest Comments" href="{{=URL(c='plugin_comments', f='feed.rss')}}" />
+    {{if 'page' in globals():}}
+            {{if page.type == 'post':}}
+        <link rel="alternate" title="Comments for {{=page.title}}" type="application/rss+xml"
+            href="{{=URL(c='weblog', f='feed.rss', args=page.slug)}}" />
+            {{pass}}
+        {{pass}}
+        {{if 'category' in globals():}}
+            <link rel="alternate" title="Posts in Category {{=category}}" type="application/rss+xml"
+                href="{{=URL(c='weblog', f='feed.rss', args=['category', category])}}">
+        {{pass}}
+{{pass}}
+
+{{def gaq():}}
+    {{if not DEV:}}
+        <!--
+            GOOGLE ANALYTICS
+        -->
+        <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', '{{=configure.read('site-settings', 'ga_tracker')}}']);
+		_gaq.push(['_trackPageview']);
+	  
+		(function() {
+		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+		})();
+	  </script>
+    {{pass}}
+{{pass}}
+
+   
+
 {{
 def print_tags(tags, link):
     for i in tags:
@@ -20,16 +202,15 @@ pass
 {{def list_pages(rows, snip=2000, use_permalink=False):}}
     <div id="page_listing">
     {{for page in rows:}}
-    {{if not page: continue}}
         <div class="page">
             {{
             if use_permalink:
-                url = URL(r=request, c=WEBLOG, f='archive', 
+                url = URL(c='weblog', f='archive', 
                     args=[page.posted_on.year, page.posted_on.month,
                             page.posted_on.day, page.slug, page.id]
                 )
             else:
-                url = URL(r=request, c=WEBLOG, f='view', args=page.slug)
+                url = URL(c='weblog', f='view', args=page.slug)
                 pass
             }}
         
@@ -43,7 +224,7 @@ pass
                          </span> 
                 | {{=plugin_comments_for('page', page.id).count()}} comments
                 <br />
-                 self.isinstance({{print_categories(get_categories(page), URL(r=request, c=WEBLOG, f='category'))}})
+                 self.isinstance({{print_categories(get_categories(page), URL(c='weblog', f='category'))}})
             </h4>
             <div class="content">
                 {{#=XML(WIKI(__highlight__(page.content[:snip], linenos=False)))}}
@@ -60,7 +241,7 @@ pass
             </div>
             <div class="tags">
                 {{
-                url = URL(r=request, c=WEBLOG, f='tag')
+                url = URL(c='weblog', f='tag')
                 print_tags(plugin_tagging_get_tags('page', page.id), url)
                 }}
                 <div style="clear: both"></div>
@@ -82,13 +263,14 @@ pass
     {{pass}}
     </div>
 {{pass}}
+
 {{def full_page(page, comments=False):}}
     <div id="full_page">
     <div class="page">
-        {{=A("permalink", _style="float: right; margin-left: 1.2em;", _href=URL(r=request, c=WEBLOG, f='archive', args=[page.posted_on.year, page.posted_on.month, page.posted_on.day, page.slug, page.id]))}}
+        {{=A("permalink", _style="float: right; margin-left: 1.2em;", _href=URL(c='weblog', f='archive', args=[page.posted_on.year, page.posted_on.month, page.posted_on.day, page.slug, page.id]))}}
         
         {{if auth.is_logged_in():}}
-        <a style="float: right;" href="{{=URL(r=request, c='admin', f='create', args=[page.type, page.slug])}}">edit</a>
+        <a style="float: right;" href="{{=URL(c='admin', f='create', args=[page.type, page.slug])}}">edit</a>
         {{pass}}
         
         <h2><a href="{{=get_permalink(page)}}">{{=page.title}}</a></h2>
@@ -96,7 +278,7 @@ pass
             <div class="tags">
                 {{
                 tags = plugin_tagging_get_tags('page', page.id)
-                print_tags(tags, URL(r=request, c=WEBLOG, f='tag'))
+                print_tags(tags, URL(c='weblog', f='tag'))
                 }}
             </div>
             <h4>
@@ -107,10 +289,10 @@ pass
                             <span class="time">{{=page.posted_on.strftime("%I:%M %p")}}</span>
                          </span>
                 <br />
-                    self.isinstance({{print_categories(get_categories(page), URL(r=request, c=WEBLOG, f='category'))}})
+                    self.isinstance({{print_categories(get_categories(page), URL(c='weblog', f='category'))}})
                 <br />
                 {{if comments:}}
-                    {{=plugin_comments_for('page', page.id).count()}} comments | <a href="{{=URL(r=request, c=WEBLOG, f='feed.rss', args=page.slug)}}">feed</a>
+                    {{=plugin_comments_for('page', page.id).count()}} comments | <a href="{{=URL(c='weblog', f='feed.rss', args=page.slug)}}">feed</a>
                 {{pass}}
                 <br />
             </h4>

@@ -19,10 +19,185 @@ def expose_to_active(f_name, **kw):
     return decorate
 
 
+#    def expose_to_menu(title, **kw):
+#    def decorate(f):
+#        response.menu.insert(kw.get('index', len(response.menu)), 
+#            [title, False, URL(r=request, c='admin', f=kw.get('dispatch', '') + f.__name__), f.__name__, kw.get('float', False)]
+#        )
+#        f = expose_to_active(f.__name__)(f)
+#        return f
+#    return decorate
+
+#def expose_to_active(f_name, **kw):
+#    def decorate(f):
+#        for i in range(len(response.menu)):
+#            if response.menu[i][3] == f_name:
+#                if request.function == f.__name__:
+#                    response.menu[i][1] = True
+#                elif request.function == 'dispatch' and request.args(0) == f_name:
+#                    response.menu[i][1] = True
+#        return f
+#    return decorate
+
+#for k,v in globals().items():
+#    if k.startswith('admin_'):
+#        if callable(v):
+#            v()
+
+#for name, func in admin.functions.items():
+#    expose_to_menu(name.capitalize(), dispatch='dispatch/')(func)
+
+#@auth.requires_login()
+#def dispatch():
+#    name = request.args(0) or redirect(URL(r=request, f='index'))
+
+#    return admin.functions[name]()
+
+#class list_edit_delete():
+#    def __init__(self, name):
+#        self.name = name
+#        self._llist_data = None
+#        self._ledit_data = None
+#        self._ldelete_data = None
+
+#    def act(self):
+#        if request.args(0) == "edit":
+#            if not self._ledit_data:
+#                session.flash = "Editing Disabled"
+#                redirect(URL(r=request, args='list'))
+#            return self._ledit()
+#        elif request.args(0) == "delete":
+#            if not self._ledit_data or not self._ldelete_data:
+#                session.flash = "Deleting Disabled"
+#                redirect(URL(r=request, args='list'))
+#            return self._ldelete()
+#        else:
+#            return self._llist()
+
+#    def llist(self, title,
+#                query,
+#                orderby,
+#                pcache,
+#                headers,
+#                rows,
+#                delete_label="(delete)"):
+#        self._llist_data = Storage(
+#            title=title, query=query, orderby=orderby,
+#            pcache=pcache,headers=headers,rows=rows,
+#            delete_label=delete_label,
+#        )
+
+#    def _llist(self):
+#        """
+#        Keyword arguments:
+
+#        headers -- name of headers (list)
+#        rows -- lambda to generate row item (list)
+#        """
+#        response.view = 'admin/list.html'
+
+#        paginate = utils.Pagination(db, self._llist_data.query,
+#                                        self._llist_data.orderby,
+#                                        display_count=35,
+#                                        cache=self._llist_data.pcache,
+#                                        r=request, res=response)
+
+#        data = paginate.get_set()
+
+#        return dict(headers     =self._llist_data.headers,
+#                    rows        =self._llist_data.rows,
+#                    data        =data,
+#                    delete_label=self._llist_data.delete_label,
+#                    ttitle      =self._llist_data.title,
+#                    ledname     =self.name) #FIXME: ttitle because title exists (see namespace issues!)
+
+#    def ledit(self, table, onvalidation=None,
+#                upload=URL(r=request, f='download', args=request.args[:1]),):
+#        self._ledit_data = Storage(
+#            table=table, upload=upload, onvalidation=onvalidation,
+#        )
+
+#    def _ledit(self):
+#        response.view = 'admin/edit.html'
+
+#        record_id = request.args(1) or None
+
+#        if record_id:
+#            record_id = int(record_id)
+#            record = db(self._ledit_data.table.id == record_id).select().first()
+#        else:
+#            record = None
+
+#        form = SQLFORM(self._ledit_data.table, record,
+#                       linkto=URL(r=request, args=['list']),
+#                       upload=self._ledit_data.upload)
+
+#        if form.accepts(request.vars, session, onvalidation=self._ledit_data.onvalidation):
+#            session.flash = "Record has been updated"
+#            redirect(URL(r=request, args=['list']))
+#        elif form.errors:
+#            response.flash = "There were errors processing the request"
+
+#        return dict(form=form, record=record, ledname=self.name)
+
+#    def ldelete(self, description):
+#        self._ldelete_data = Storage(description=description)
+
+#    def _ldelete(self):
+#        record_id = int(request.args(1)) or redirect(URL(r=request, args='list'))
+#        record = db(self._ledit_data.table.id == record_id).select().first()
+
+#        response.view = 'admin/confirmbox.html'
+
+#        def yes():
+#            record.delete_record()
+#            session.flash = "Record successfully deleted"
+#            redirect(URL(r=request, args='list'))
+#        def no():
+#            session.flash = "The record was not deleted"
+#            redirect(URL(r=request, args='list'))
+
+#        confirm = utils.CONFIRM_BOX(request, session,
+#            content = DIV(P("Are you sure you want to delete the following record?"),
+#                        self._ldelete_data.description(record),
+#            ),
+#            func_yes = yes, func_no = no,
+#        )
+
+#        return dict(confirm_box = confirm)
+
+#@auth.requires_login()
+#@expose_to_menu('Configure', index=0, float=True)
+#def configure():
+#    l = list_edit_delete("Configuration")
+#    l.llist(
+#        "List Configuration",
+#        db.settings.id > 0,
+#        db.settings.kkey|db.settings.name,
+#        (cache.ram, 5),
+#        ['Key', 'Name', ('Value',), 'Description',],
+#        [
+#            lambda d: A(d.kkey, _href=URL(r=request, args=['edit', d.id])),
+#            lambda d: d.name,
+#            (lambda d: d.value,),
+#            lambda d: d.description,
+#        ],
+#    )
+#    l.ledit(db.settings)
+#    l.ldelete(lambda d: DIV(
+#                            P(d.kkey, ":", d.name),
+#                            P("=>", d.value),
+#                            ))
+
+#    return l.act()
+
 #########################################
 ###    Admin, and web2py stuff.
 ############
 def user(): return dict(form=auth())
+
+@auth.requires_login()
+def useradmin(): return dict()
 
 @auth.requires_login()
 def download(): return response.download(request,db)
@@ -57,7 +232,7 @@ def purgeall():
         session.flash = "Purge Cancelled"
         redirect(URL(r=request, f='imex'))
         
-    confirm = utils.CONFIRM_BOX(request, session,
+    confirm = web2py_utils.CONFIRM_BOX(request, session,
                                 title="Delete All Records",
                                 label="Are you sure you want to delete ALL records? This will also purge all USER accounts.",
                                 content="ALL database records will be deleted",
@@ -269,7 +444,7 @@ def list_pages():
     orderby = ~db.page.posted_on
     pcache = (cache.ram, 5)
     
-    paginate = utils.Pagination(db, query, orderby,
+    paginate = Pagination(db, query, orderby,
                 display_count=15,
                 cache=pcache, r=request, res=response)
     
@@ -338,7 +513,7 @@ def create():
         db.page.content,
         db.page.status,
         db.page.posted_on,
-        Field('tags', 'text', comment='Seperate tags with a comma', default=dtags, widget=WMD_IGNORE.widget),
+        Field('tags', 'text', comment='Seperate tags with a comma', default=dtags),
     ]
         
     form = SQLFORM.factory(
@@ -452,7 +627,7 @@ def list_comments():
     orderby = ~db.plugin_comments_link.linked_on
     pcache = (cache.ram, 5)
     
-    paginate = utils.Pagination(db, query, orderby,
+    paginate = Pagination(db, query, orderby,
                 display_count=15,
                 cache=pcache, r=request, res=response        
         )
@@ -494,7 +669,7 @@ def delete_comment():
         session.flash = "The record was not deleted"
         redirect(URL(r=request, f='list_comments'))
     
-    confirm = utils.CONFIRM_BOX(request, session,
+    confirm = web2py_utils.CONFIRM_BOX(request, session,
                                 content=WIKI(comment.content),
                                 func_yes = yes, func_no = no)
     
@@ -507,7 +682,7 @@ def list_files():
     orderby = ~db.file.created_on
     pcache = (cache.ram, 5)
     
-    paginate = utils.Pagination(db, query, orderby,
+    paginate = Pagination(db, query, orderby,
                 display_count=35,
                 cache=pcache, r=request, res=response        
         )
@@ -557,7 +732,7 @@ def delete_file():
         session.flash = "The record was not deleted"
         redirect(URL(r=request, f='list_files'))
     
-    confirm = utils.CONFIRM_BOX(request, session,
+    confirm = web2py_utils.CONFIRM_BOX(request, session,
                                 content=DIV(P(A(file.title, _href=URL(r=request, f='download', args=file.uploaded_data))),
                                             P(file.created_on.strftime("%Y-%m-%d %I:%M %p")),
                                             IMG(_width='100%',_src=URL(r=request, f='download', args=file.uploaded_data)) if file.type == "image" else '',

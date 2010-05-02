@@ -6,4 +6,4 @@ APP DEPENDENCIES
 1. guppy
 2. clevercss *optional
 3. pygments
-4.
+4. web2py_utils (hg.thadeusb.com/Web/web2py_utils)
